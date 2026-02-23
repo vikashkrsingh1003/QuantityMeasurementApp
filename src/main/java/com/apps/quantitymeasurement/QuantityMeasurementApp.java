@@ -108,6 +108,44 @@ public class QuantityMeasurementApp {
     }
     
     
+
+    public static void demonstrateExtendedUnitSupport() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        // First quantity input
+        System.out.print("Enter first value: ");
+        double value1 = scanner.nextDouble();
+
+        System.out.print("Enter first unit (FEET/INCHES/YARDS/CENTIMETERS): ");
+        String unitInput1 = scanner.next();
+
+        // Second quantity input
+        System.out.print("Enter second value: ");
+        double value2 = scanner.nextDouble();
+
+        System.out.print("Enter second unit (FEET/INCHES/YARDS/CENTIMETERS): ");
+        String unitInput2 = scanner.next();
+
+        try {
+            Length.LengthUnit unit1 =
+                    Length.LengthUnit.valueOf(unitInput1.trim().toUpperCase());
+
+            Length.LengthUnit unit2 =
+                    Length.LengthUnit.valueOf(unitInput2.trim().toUpperCase());
+
+            Length length1 = new Length(value1, unit1);
+            Length length2 = new Length(value2, unit2);
+
+            System.out.println("Input: " + length1 + " and " + length2);
+            System.out.println("Output: Equal (" + length1.equals(length2) + ")");
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid unit entered. Supported units: FEET, INCHES, YARDS, CENTIMETERS");
+        }
+    }
+    
+    
     // ---------------- MAIN METHOD ------------------
     public static void main(String[] args) {
 
@@ -116,7 +154,8 @@ public class QuantityMeasurementApp {
         try {
            // demonstrateFeetEquality(sc);
             //demonstrateInchesEquality(sc);
-            demonstrateFeetInchesComparison();
+          //  demonstrateFeetInchesComparison();
+            demonstrateExtendedUnitSupport();
         } catch (Exception e) {
             System.out.println("Invalid input! Please enter numeric values.");
          }

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class QuantityMeasurementApp {
 
-    //--------------FEET CLASS--------------
+    //-------------FEET CLASS--------------
     public static class Feet {
 
         private final double value;
@@ -76,18 +76,50 @@ public class QuantityMeasurementApp {
 
         System.out.println("Inches Equal: " + i1.equals(i2));
     }
+    
+    public static void demonstrateFeetInchesComparison() {
 
+        Scanner scanner = new Scanner(System.in);
+
+        // First quantity
+        System.out.print("Enter value: ");
+        double value1 = scanner.nextDouble();
+
+        System.out.print("Enter unit (feet/inches): ");
+        String unit1Input = scanner.next();
+
+        // Second quantity
+        System.out.print("Enter value: ");
+        double value2 = scanner.nextDouble();
+
+        System.out.print("Enter unit (feet/inches): ");
+        String unit2Input = scanner.next();
+
+        // Convert string to enum
+        Length.LengthUnit unit1 = Length.LengthUnit.valueOf(unit1Input.toUpperCase());
+        Length.LengthUnit unit2 = Length.LengthUnit.valueOf(unit2Input.toUpperCase());
+
+        Length length1 = new Length(value1, unit1);
+        Length length2 = new Length(value2, unit2);
+
+        // Output
+        System.out.println("Input: " + length1 + " and " + length2);
+        System.out.println("Output: Equal (" + length1.equals(length2) + ")");
+    }
+    
+    
     // ---------------- MAIN METHOD ------------------
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
         try {
-            demonstrateFeetEquality(sc);
-            demonstrateInchesEquality(sc);
+           // demonstrateFeetEquality(sc);
+            //demonstrateInchesEquality(sc);
+            demonstrateFeetInchesComparison();
         } catch (Exception e) {
             System.out.println("Invalid input! Please enter numeric values.");
-        }
+         }
 
         sc.close();
     }

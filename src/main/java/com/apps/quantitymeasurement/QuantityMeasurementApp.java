@@ -1,165 +1,46 @@
-package com.apps.quantitymeasurement;
 
-import java.util.Scanner;
+package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
-    //-------------FEET CLASS--------------
-    public static class Feet {
+	public static boolean demonstrateLengthEquality(Length l1, Length l2) {
+		return l1.equals(l2);
+	}
 
-        private final double value;
+	public static boolean demonstrateLengthComparison(double value1, Length.LengthUnit unit1, double value2,Length.LengthUnit unit2) {
+		Length l1 = new Length(value1, unit1);
+		Length l2 = new Length(value2, unit2);
+		boolean result = l1.equals(l2);
+		System.out.println("Are lengths equal : " + result);
+		return result;
+	}
 
-        public Feet(double value) {
-            this.value = value;
-        }
+	public static Length demonstrateLengthConversion(double value, Length.LengthUnit fromUnit,Length.LengthUnit toUnit) {
+		Length source = new Length(value, fromUnit);
+		Length converted = source.convertTo(toUnit);
+		System.out.println(source + " -> " + converted);
+		return converted;
+	}
 
-        @Override
-        public boolean equals(Object obj) {
+	public static Length demonstrateLengthConversion(Length length, Length.LengthUnit toUnit) {
+		Length converted = length.convertTo(toUnit);
+		System.out.println(length + " -> " + converted);
+		return converted;
+	}
 
-            if (this == obj) return true;
-            if (obj == null) return false;
-            if (getClass() != obj.getClass()) return false;
+	public static void main(String[] args) {
 
-            Feet other = (Feet) obj;
-
-            return Double.compare(this.value, other.value) == 0;
-        }
-    }
-
-    //--------------- INCHES CLASS -------------------
-    public static class Inches {
-
-        private final double value;
-
-        public Inches(double value) {
-            this.value = value;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-
-            if (this == obj) return true;
-            if (obj == null) return false;
-            if (getClass() != obj.getClass()) return false;
-
-            Inches other = (Inches) obj;
-
-            return Double.compare(this.value, other.value) == 0;
-        }
-    }
-
-    // -------------------- DEMO METHODS----------------------
-    public static void demonstrateFeetEquality(Scanner sc) {
-
-        System.out.print("Enter first value in feet: ");
-        double v1 = sc.nextDouble();
-
-        System.out.print("Enter second value in feet: ");
-        double v2 = sc.nextDouble();
-
-        Feet f1 = new Feet(v1);
-        Feet f2 = new Feet(v2);
-
-        System.out.println("Feet Equal: " + f1.equals(f2));
-    }
-
-    public static void demonstrateInchesEquality(Scanner sc) {
-
-        System.out.print("Enter first value in inches: ");
-        double v1 = sc.nextDouble();
-
-        System.out.print("Enter second value in inches: ");
-        double v2 = sc.nextDouble();
-
-        Inches i1 = new Inches(v1);
-        Inches i2 = new Inches(v2);
-
-        System.out.println("Inches Equal: " + i1.equals(i2));
-    }
-    
-    public static void demonstrateFeetInchesComparison() {
-
-        Scanner scanner = new Scanner(System.in);
-
-        // First quantity
-        System.out.print("Enter value: ");
-        double value1 = scanner.nextDouble();
-
-        System.out.print("Enter unit (feet/inches): ");
-        String unit1Input = scanner.next();
-
-        // Second quantity
-        System.out.print("Enter value: ");
-        double value2 = scanner.nextDouble();
-
-        System.out.print("Enter unit (feet/inches): ");
-        String unit2Input = scanner.next();
-
-        // Convert string to enum
-        Length.LengthUnit unit1 = Length.LengthUnit.valueOf(unit1Input.toUpperCase());
-        Length.LengthUnit unit2 = Length.LengthUnit.valueOf(unit2Input.toUpperCase());
-
-        Length length1 = new Length(value1, unit1);
-        Length length2 = new Length(value2, unit2);
-
-        // Output
-        System.out.println("Input: " + length1 + " and " + length2);
-        System.out.println("Output: Equal (" + length1.equals(length2) + ")");
-    }
-    
-    
-
-    public static void demonstrateExtendedUnitSupport() {
-
-        Scanner scanner = new Scanner(System.in);
-
-        // First quantity input
-        System.out.print("Enter first value: ");
-        double value1 = scanner.nextDouble();
-
-        System.out.print("Enter first unit (FEET/INCHES/YARDS/CENTIMETERS): ");
-        String unitInput1 = scanner.next();
-
-        // Second quantity input
-        System.out.print("Enter second value: ");
-        double value2 = scanner.nextDouble();
-
-        System.out.print("Enter second unit (FEET/INCHES/YARDS/CENTIMETERS): ");
-        String unitInput2 = scanner.next();
-
-        try {
-            Length.LengthUnit unit1 =
-                    Length.LengthUnit.valueOf(unitInput1.trim().toUpperCase());
-
-            Length.LengthUnit unit2 =
-                    Length.LengthUnit.valueOf(unitInput2.trim().toUpperCase());
-
-            Length length1 = new Length(value1, unit1);
-            Length length2 = new Length(value2, unit2);
-
-            System.out.println("Input: " + length1 + " and " + length2);
-            System.out.println("Output: Equal (" + length1.equals(length2) + ")");
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid unit entered. Supported units: FEET, INCHES, YARDS, CENTIMETERS");
-        }
-    }
-    
-    
-    // ---------------- MAIN METHOD ------------------
-    public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        try {
-           // demonstrateFeetEquality(sc);
-            //demonstrateInchesEquality(sc);
-          //  demonstrateFeetInchesComparison();
-            demonstrateExtendedUnitSupport();
-        } catch (Exception e) {
-            System.out.println("Invalid input! Please enter numeric values.");
-         }
-
-        sc.close();
-    }
+		demonstrateLengthComparison(1.0, Length.LengthUnit.FEET, 12.0, Length.LengthUnit.INCHES);
+		demonstrateLengthComparison(1.0, Length.LengthUnit.YARDS, 36.0, Length.LengthUnit.INCHES);
+		demonstrateLengthComparison(100.0, Length.LengthUnit.CENTIMETERS, 39.3701, Length.LengthUnit.INCHES);
+		demonstrateLengthComparison(3.0, Length.LengthUnit.FEET, 1.0, Length.LengthUnit.YARDS);
+		demonstrateLengthComparison(30.48, Length.LengthUnit.CENTIMETERS, 1.0, Length.LengthUnit.FEET);
+		
+		demonstrateLengthConversion(1.0, Length.LengthUnit.FEET, Length.LengthUnit.INCHES); 
+		demonstrateLengthConversion(3.0, Length.LengthUnit.YARDS, Length.LengthUnit.FEET); 
+		demonstrateLengthConversion(36.0, Length.LengthUnit.INCHES, Length.LengthUnit.YARDS); 
+		demonstrateLengthConversion(30.48, Length.LengthUnit.CENTIMETERS, Length.LengthUnit.FEET); 
+		
+		demonstrateLengthConversion(new Length(-1.0, Length.LengthUnit.FEET), Length.LengthUnit.INCHES);
+	}
 }

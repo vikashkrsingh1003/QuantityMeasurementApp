@@ -3,6 +3,8 @@ package com.apps.quantiymeasurement;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.apps.quantitymeasurement.Length;
+import com.apps.quantitymeasurement.Length.LengthUnit;
 import com.apps.quantitymeasurement.QuantityMeasurementApp.Feet;
 import com.apps.quantitymeasurement.QuantityMeasurementApp.Inches;
 
@@ -83,6 +85,42 @@ public class QuantityMeasurementAppTest {
 
         assertTrue(i1.equals(i1));
     }
+    
+    
+    //uc3 test
+	
+    @Test
+	public void testQuantity_SameValueSameUnit() {
+		Length q1 = new Length(1.0, LengthUnit.FEET);
+		Length q2 = new Length(1.0, LengthUnit.FEET);
+		assertTrue(q1.equals(q2));
+	}
+
+	@Test
+	public void testQuantity_DifferentValue() {
+		Length q1 = new Length(1.0, LengthUnit.FEET);
+		Length q2 = new Length(2.0, LengthUnit.FEET);
+		assertFalse(q1.equals(q2));
+	}
+
+	@Test
+	public void testQuantity_NullComparison() {
+		Length q1 = new Length(1.0, LengthUnit.FEET);
+		assertFalse(q1.equals(null));
+	}
+
+	@Test
+	public void testQuantity_DifferentClass() {
+		Length q1 = new Length(1.0, LengthUnit.FEET);
+		String other = "NotQuantity";
+		assertFalse(q1.equals(other));
+	}
+
+	@Test
+	public void testQuantity_SameReference() {
+		Length q1 = new Length(1.0, LengthUnit.FEET);
+		assertTrue(q1.equals(q1));
+	}
     
     
 }

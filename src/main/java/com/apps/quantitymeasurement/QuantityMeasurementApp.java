@@ -4,25 +4,21 @@ import java.util.Scanner;
 
 public class QuantityMeasurementApp {
 
-    // Inner class to represent Feet measurement
+    //--------------FEET CLASS--------------
     public static class Feet {
 
         private final double value;
 
-        // Constructor
         public Feet(double value) {
             this.value = value;
         }
 
-        // Override equals() to compare Feet objects
         @Override
         public boolean equals(Object obj) {
 
-            if (this == obj)
-                return true;
-
-            if (obj == null || getClass() != obj.getClass())
-                return false;
+            if (this == obj) return true;
+            if (obj == null) return false;
+            if (getClass() != obj.getClass()) return false;
 
             Feet other = (Feet) obj;
 
@@ -30,21 +26,69 @@ public class QuantityMeasurementApp {
         }
     }
 
-    // Main method with user input
+    //--------------- INCHES CLASS -------------------
+    public static class Inches {
+
+        private final double value;
+
+        public Inches(double value) {
+            this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+
+            if (this == obj) return true;
+            if (obj == null) return false;
+            if (getClass() != obj.getClass()) return false;
+
+            Inches other = (Inches) obj;
+
+            return Double.compare(this.value, other.value) == 0;
+        }
+    }
+
+    // -------------------- DEMO METHODS----------------------
+    public static void demonstrateFeetEquality(Scanner sc) {
+
+        System.out.print("Enter first value in feet: ");
+        double v1 = sc.nextDouble();
+
+        System.out.print("Enter second value in feet: ");
+        double v2 = sc.nextDouble();
+
+        Feet f1 = new Feet(v1);
+        Feet f2 = new Feet(v2);
+
+        System.out.println("Feet Equal: " + f1.equals(f2));
+    }
+
+    public static void demonstrateInchesEquality(Scanner sc) {
+
+        System.out.print("Enter first value in inches: ");
+        double v1 = sc.nextDouble();
+
+        System.out.print("Enter second value in inches: ");
+        double v2 = sc.nextDouble();
+
+        Inches i1 = new Inches(v1);
+        Inches i2 = new Inches(v2);
+
+        System.out.println("Inches Equal: " + i1.equals(i2));
+    }
+
+    // ---------------- MAIN METHOD ------------------
     public static void main(String[] args) {
 
-        try (Scanner sc = new Scanner(System.in)) {
+        Scanner sc = new Scanner(System.in);
 
-            System.out.print("Enter first value in feet: ");
-            double inputOne = sc.nextDouble();
-
-            System.out.print("Enter second value in feet: ");
-            double inputTwo = sc.nextDouble();
-
-            Feet f1 = new Feet(inputOne);
-            Feet f2 = new Feet(inputTwo);
-
-            System.out.println("Equal (" + f1.equals(f2) + ")");
+        try {
+            demonstrateFeetEquality(sc);
+            demonstrateInchesEquality(sc);
+        } catch (Exception e) {
+            System.out.println("Invalid input! Please enter numeric values.");
         }
+
+        sc.close();
     }
 }

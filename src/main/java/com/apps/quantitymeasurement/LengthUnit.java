@@ -1,6 +1,5 @@
 package com.apps.quantitymeasurement;
 
-
 public enum LengthUnit {
     FEET(12.0),
     INCHES(1.0),

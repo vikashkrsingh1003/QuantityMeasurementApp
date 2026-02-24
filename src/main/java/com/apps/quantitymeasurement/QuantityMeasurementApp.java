@@ -1,7 +1,5 @@
 package com.apps.quantitymeasurement;
 
-import com.apps.quantitymeasurement.Length.LengthUnit;
-
 public class QuantityMeasurementApp {
 	// Generic method to demonstrate length equality check
     public static boolean demonstrateLengthEquality(Length length1, Length length2) {
@@ -12,7 +10,7 @@ public class QuantityMeasurementApp {
 	   Length length1 = new Length(value1, unit1);
 	   Length length2 = new Length(value2, unit2);
 	   
-	   System.out.println("Comparing " + value1 +" "+ unit1 + " and " + value2 + " "+unit2);
+	   System.out.println("Comparing " + value1 + unit1 + " and " + value2 + unit2);
 	   return demonstrateLengthEquality(length1, length2);
    }
    
@@ -22,7 +20,7 @@ public class QuantityMeasurementApp {
 	   return length.convertTo(toUnit);
    }
    
-   // convert the length from one uint to other, overloaded method takes Length object directly
+   // convert the length from one unit to other, overloaded method takes Length object directly
    public static Length demonstrateLengthConversion(Length length, LengthUnit toUnit) {
 	   return length.convertTo(toUnit);
    }

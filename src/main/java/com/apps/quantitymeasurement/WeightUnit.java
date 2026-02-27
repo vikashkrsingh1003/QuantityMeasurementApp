@@ -7,7 +7,7 @@ public enum WeightUnit implements IMeasurable{
     POUND(453.592),
     TONNE(1000000.0);
 
-    // Conversion factor to the base unit
+    // Conversion factor to the base units
     private final double conversionFactor;
 
     // Constructor

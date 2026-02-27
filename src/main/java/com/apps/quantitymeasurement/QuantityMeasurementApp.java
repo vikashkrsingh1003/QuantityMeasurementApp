@@ -21,6 +21,24 @@ public class QuantityMeasurementApp {
     public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit) {
         return quantity1.add(quantity2, targetUnit);
     }
+    
+    // Demonstrate Subtraction
+    public static <U extends IMeasurable> Quantity<U>
+    demonstrateSubtraction(Quantity<U> quantity1, Quantity<U> quantity2) {
+        return quantity1.subtract(quantity2);
+    }
+
+    // Demonstrate Subtraction with target unit
+    public static <U extends IMeasurable> Quantity<U>
+    demonstrateSubtraction(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit) {
+        return quantity1.subtract(quantity2, targetUnit);
+    }
+
+    // Demonstrate Division
+    public static <U extends IMeasurable> Quantity<U>
+    demonstrateDivision(Quantity<U> quantity1, Quantity<U> quantity2) {
+        return quantity1.divide(quantity2);
+    }
 
     public static void main(String[] args) {
         // Demonstration equality 
@@ -44,6 +62,37 @@ public class QuantityMeasurementApp {
         // demonstration addition with target unit
         Quantity<WeightUnit> sumWeightInGrams = demonstrateAddition(weightInKilograms, weightInPounds, WeightUnit.GRAM);
         System.out.println("Sum Weight in Grams: " + sumWeightInGrams.getValue() + " " + sumWeightInGrams.getUnit());
+        System.out.println();
+        
+        
+        // demonstration for volume
+        Quantity<VolumeUnit> litre = new Quantity<>(1.0, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> millilitre = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+
+        // Equality
+        System.out.println(demonstrateEquality(litre, millilitre));
+        System.out.println();
+
+        // Conversion
+        System.out.println(demonstrateConversion(litre, VolumeUnit.GALLON));
+        System.out.println();
+
+        // Addition
+        System.out.println(demonstrateAddition(litre, millilitre));
+        System.out.println();
+        
+        // Subtraction demo
+        Quantity<LengthUnit> tenFeet = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> sixInches = new Quantity<>(6.0, LengthUnit.INCHES);
+
+        System.out.println(demonstrateSubtraction(tenFeet, sixInches));
+        System.out.println();
+
+        // Division demo
+        Quantity<LengthUnit> twentyFeet = new Quantity<>(20.0, LengthUnit.FEET);
+        Quantity<LengthUnit> fiveFeet = new Quantity<>(5.0, LengthUnit.FEET);
+
+        System.out.println(demonstrateDivision(twentyFeet, fiveFeet));
         System.out.println();
     }
 }

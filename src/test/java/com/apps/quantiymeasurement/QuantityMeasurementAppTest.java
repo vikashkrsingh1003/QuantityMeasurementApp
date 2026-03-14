@@ -1,5 +1,6 @@
 package com.apps.quantiymeasurement;
 
+
 import org.junit.jupiter.api.Test;
 
 import com.apps.quantitymeasurement.IMeasurable;
@@ -520,6 +521,31 @@ public class QuantityMeasurementAppTest {
         assertEquals(2.0,
                 new Quantity<>(10, LengthUnit.FEET)
                         .divide(new Quantity<>(5, LengthUnit.FEET)));
+=======
+
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+import com.apps.quantitymeasurement.UnitLayer.LengthUnit;
+import com.apps.quantitymeasurement.UnitLayer.Quantity;
+import com.apps.quantitymeasurement.UnitLayer.TemperatureUnit;
+import com.apps.quantitymeasurement.UnitLayer.VolumeUnit;
+import com.apps.quantitymeasurement.UnitLayer.WeightUnit;
+
+public class QuantityMeasurementAppTest {
+
+    // ==========================
+    // LENGTH TESTS
+    // ==========================
+
+    @Test
+    public void testLengthUnitConversionFactor() {
+        assertEquals(12.0, LengthUnit.FEET.getConversionFactor(), 0.0001);
+        assertEquals(1.0, LengthUnit.INCHES.getConversionFactor(), 0.0001);
+        assertEquals(36.0, LengthUnit.YARDS.getConversionFactor(), 0.0001);
+        assertEquals(0.393701, LengthUnit.CENTIMETERS.getConversionFactor(), 0.0001);
+>>>>>>> Stashed changes
     }
 
     // =========================================================================
@@ -527,6 +553,7 @@ public class QuantityMeasurementAppTest {
     // =========================================================================
 
     @Test
+<<<<<<< Updated upstream
     void testValidation_NullOperand_ConsistentAcrossOperations() {
         Quantity<LengthUnit> q = new Quantity<>(10, LengthUnit.FEET);
         Exception addEx = assertThrows(IllegalArgumentException.class, () -> q.add(null));
@@ -546,9 +573,26 @@ public class QuantityMeasurementAppTest {
         Exception divEx = assertThrows(IllegalArgumentException.class, () -> length.divide((Quantity) weight));
         assertEquals(addEx.getMessage(), subEx.getMessage());
         assertEquals(addEx.getMessage(), divEx.getMessage());
+=======
+    public void testLengthConvertToBase() {
+        assertEquals(12.0, LengthUnit.FEET.convertToBaseUnit(1), 0.01);
+        assertEquals(12.0, LengthUnit.INCHES.convertToBaseUnit(12), 0.01);
+        assertEquals(36.0, LengthUnit.YARDS.convertToBaseUnit(1), 0.01);
     }
 
     @Test
+    public void testLengthConvertFromBase() {
+        assertEquals(1.0, LengthUnit.FEET.convertFromBaseUnit(12), 0.01);
+        assertEquals(12.0, LengthUnit.INCHES.convertFromBaseUnit(12), 0.01);
+>>>>>>> Stashed changes
+    }
+
+    // ==========================
+    // WEIGHT TESTS
+    // ==========================
+
+    @Test
+<<<<<<< Updated upstream
     void testValidation_FiniteValue_ConsistentAcrossOperations() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Quantity<>(Double.NaN, LengthUnit.FEET));
@@ -932,3 +976,228 @@ public class QuantityMeasurementAppTest {
                         .add(new Quantity<>(5, LengthUnit.FEET)).getValue(), EPSILON);
     }
 }
+=======
+    public void testWeightUnitConversionFactor() {
+        assertEquals(0.001, WeightUnit.MILLIGRAM.getConversionFactor(), 0.0001);
+        assertEquals(1.0, WeightUnit.GRAM.getConversionFactor(), 0.0001);
+        assertEquals(1000.0, WeightUnit.KILOGRAM.getConversionFactor(), 0.0001);
+    }
+
+    @Test
+    public void testWeightConvertToBase() {
+        assertEquals(1000.0, WeightUnit.KILOGRAM.convertToBaseUnit(1), 0.01);
+        assertEquals(1000.0, WeightUnit.GRAM.convertToBaseUnit(1000), 0.01);
+    }
+
+    // ==========================
+    // EQUALITY TESTS
+    // ==========================
+
+    @Test
+    public void testLengthEquality() {
+        assertTrue(new Quantity<>(1, LengthUnit.FEET)
+                .equals(new Quantity<>(12, LengthUnit.INCHES)));
+    }
+
+    @Test
+    public void testWeightEquality() {
+        assertTrue(new Quantity<>(1, WeightUnit.KILOGRAM)
+                .equals(new Quantity<>(1000, WeightUnit.GRAM)));
+    }
+
+    @Test
+    public void testNotEqualDifferentValues() {
+        assertFalse(new Quantity<>(1, LengthUnit.FEET)
+                .equals(new Quantity<>(10, LengthUnit.INCHES)));
+    }
+
+    @Test
+    public void testEqualsNull() {
+        assertFalse(new Quantity<>(1, LengthUnit.FEET).equals(null));
+    }
+
+    @Test
+    public void testSameReference() {
+        Quantity<LengthUnit> q = new Quantity<>(1, LengthUnit.FEET);
+        assertTrue(q.equals(q));
+    }
+
+    // ==========================
+    // CONVERSION TESTS
+    // ==========================
+
+    @Test
+    public void testLengthConversion() {
+
+        Quantity<LengthUnit> result =
+                new Quantity<>(1, LengthUnit.FEET)
+                        .convertTo(LengthUnit.INCHES);
+
+        assertEquals(12, result.getValue(), 0.01);
+    }
+
+    @Test
+    public void testWeightConversion() {
+
+        Quantity<WeightUnit> result =
+                new Quantity<>(1, WeightUnit.KILOGRAM)
+                        .convertTo(WeightUnit.GRAM);
+
+        assertEquals(1000, result.getValue(), 0.01);
+    }
+
+    // ==========================
+    // ADDITION TESTS
+    // ==========================
+
+    @Test
+    public void testLengthAddition() {
+
+        Quantity<LengthUnit> result =
+                new Quantity<>(1, LengthUnit.FEET)
+                        .add(new Quantity<>(12, LengthUnit.INCHES));
+
+        assertTrue(result.equals(new Quantity<>(2, LengthUnit.FEET)));
+    }
+
+    @Test
+    public void testWeightAddition() {
+
+        Quantity<WeightUnit> result =
+                new Quantity<>(1, WeightUnit.KILOGRAM)
+                        .add(new Quantity<>(1000, WeightUnit.GRAM));
+
+        assertTrue(result.equals(new Quantity<>(2, WeightUnit.KILOGRAM)));
+    }
+
+    // ==========================
+    // VOLUME TESTS
+    // ==========================
+
+    @Test
+    public void testVolumeEquality_LitreToMillilitre() {
+
+        Quantity<VolumeUnit> v1 =
+                new Quantity<>(1.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> v2 =
+                new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+
+        assertTrue(v1.equals(v2));
+    }
+
+    @Test
+    public void testVolumeConversion() {
+
+        Quantity<VolumeUnit> v =
+                new Quantity<>(1.0, VolumeUnit.LITRE)
+                        .convertTo(VolumeUnit.MILLILITRE);
+
+        assertEquals(1000.0, v.getValue(), 0.0001);
+    }
+
+    // ==========================
+    // TEMPERATURE TESTS
+    // ==========================
+
+    @Test
+    public void testTemperatureEquality() {
+
+        Quantity<TemperatureUnit> t1 =
+                new Quantity<>(0.0, TemperatureUnit.CELSIUS);
+
+        Quantity<TemperatureUnit> t2 =
+                new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
+
+        assertEquals(t1, t2);
+    }
+
+    @Test
+    public void testTemperatureConversion() {
+
+        Quantity<TemperatureUnit> t =
+                new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+
+        Quantity<TemperatureUnit> result =
+                t.convertTo(TemperatureUnit.FAHRENHEIT);
+
+        assertEquals(212.0, result.getValue(), 0.01);
+    }
+
+    @Test
+    public void testTemperatureAbsoluteZero() {
+
+        Quantity<TemperatureUnit> t1 =
+                new Quantity<>(-273.15, TemperatureUnit.CELSIUS);
+
+        Quantity<TemperatureUnit> t2 =
+                new Quantity<>(0.0, TemperatureUnit.KELVIN);
+
+        assertEquals(t1, t2);
+    }
+    // ===============================
+    // EDGE CASE TESTS
+    // ===============================
+
+    @Test
+    public void testZeroValuesAcrossUnits() {
+        Quantity<VolumeUnit> v1 = new Quantity<>(0, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> v2 = new Quantity<>(0, VolumeUnit.GALLON);
+
+        assertTrue(v1.equals(v2));
+    }
+
+    @Test
+    public void testNegativeValues() {
+        Quantity<LengthUnit> a = new Quantity<>(-1, LengthUnit.FEET);
+        Quantity<LengthUnit> b = new Quantity<>(-12, LengthUnit.INCHES);
+
+        assertTrue(a.equals(b));
+    }
+
+    @Test
+    public void testLargeValues() {
+        Quantity<WeightUnit> a =
+                new Quantity<>(1_000_000, WeightUnit.GRAM);
+
+        Quantity<WeightUnit> b =
+                new Quantity<>(1000, WeightUnit.KILOGRAM);
+
+        assertTrue(a.equals(b));
+    }
+
+    // ===============================
+    // HASHCODE TEST
+    // ===============================
+
+    @Test
+    public void testHashCodeConsistency() {
+        Quantity<LengthUnit> a =
+                new Quantity<>(1, LengthUnit.FEET);
+
+        Quantity<LengthUnit> b =
+                new Quantity<>(12, LengthUnit.INCHES);
+
+        assertEquals(a.hashCode(), b.hashCode());
+    }
+
+    // ===============================
+    // IMMUTABILITY TEST
+    // ===============================
+
+    @Test
+    public void testImmutability() {
+
+        Quantity<LengthUnit> original =
+                new Quantity<>(1, LengthUnit.FEET);
+
+        Quantity<LengthUnit> converted =
+                original.convertTo(LengthUnit.INCHES);
+
+        assertNotEquals(original.getUnit(), converted.getUnit());
+    }
+    
+ 
+
+}
+

@@ -2,6 +2,9 @@ package com.apps.quantitymeasurement.entityLayer;
 
 import java.io.Serializable;
 
+
+
+
 public class QuantityDTO {
 
     public double value;
@@ -10,11 +13,9 @@ public class QuantityDTO {
     public QuantityDTO(double value, IMeasurableUnit unit) {
         this.value = value;
         this.unit = unit;
-    }
+    }  
 
-    /**
-     * Interface representing measurable unit for DTO
-     */
+    
     public interface IMeasurableUnit {
         String getUnitName();
         String getMeasurementType();

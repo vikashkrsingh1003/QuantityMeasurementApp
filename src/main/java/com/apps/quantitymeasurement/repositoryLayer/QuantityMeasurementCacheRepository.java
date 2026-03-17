@@ -1,16 +1,25 @@
 package com.apps.quantitymeasurement.repositoryLayer;
 
-import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.apps.quantitymeasurement.entityLayer.QuantityMeasurementEntity;
 
-
 public class QuantityMeasurementCacheRepository implements IQuantityMeasurementRepository {
 
+    private static QuantityMeasurementCacheRepository instance;
+
     private final List<QuantityMeasurementEntity> cache = new ArrayList<>();
+
+    private QuantityMeasurementCacheRepository() {
+    }
+
+    public static QuantityMeasurementCacheRepository getInstance() {
+        if (instance == null) {
+            instance = new QuantityMeasurementCacheRepository();
+        }
+        return instance;
+    }
 
     @Override
     public void save(QuantityMeasurementEntity entity) {
@@ -19,6 +28,6 @@ public class QuantityMeasurementCacheRepository implements IQuantityMeasurementR
 
     @Override
     public List<QuantityMeasurementEntity> findAll() {
-        return cache;
+        return new ArrayList<>(cache);
     }
 }

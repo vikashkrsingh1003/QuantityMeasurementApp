@@ -222,6 +222,6 @@ public class QuantityMeasurementAppTest {
         Quantity<LengthUnit> b = new Quantity<>(-12, LengthUnit.INCHES);
 
         assertTrue(a.equals(b));
-    }
+    } 
 
 }

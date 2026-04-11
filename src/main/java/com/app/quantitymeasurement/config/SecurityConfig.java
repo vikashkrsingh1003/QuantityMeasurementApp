@@ -1,51 +1,83 @@
 package com.app.quantitymeasurement.config;
 
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.app.quantitymeasurement.security.jwt.JwtAuthenticationFilter;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-
+    private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter filter;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final AuthenticationFailureHandler authenticationFailureHandler;
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http
-            // 1. Disable CSRF for JWT/Stateless APIs
-            .csrf(csrf -> csrf.disable())
-
-            // 2. Configure Endpoint Permissions
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/h2-console/**").permitAll() // Keep H2 access
-                .requestMatchers("/auth/**").permitAll()       // Permit login/register
-                .anyRequest().authenticated()                  // Protect all other APIs
-            )
-
-            // 3. Enable OAuth2 Login
-            .oauth2Login(oauth->oauth.defaultSuccessUrl("/oauth/success",true))
-
-            // 4. Handle H2 Frames (Needed to see the H2 UI in browser)
-            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
-
-            // 5. Session Management (Set to stateless if strictly using JWT)
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            );
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(c -> c.disable())
+        	.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .httpBasic(Customizer.withDefaults())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .userDetailsService(userDetailsService)
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth -> {
+                    oauth.loginPage("/login/google");
+                    oauth.successHandler(authenticationSuccessHandler);
+                    oauth.failureHandler(authenticationFailureHandler);
+                })
+        	.authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/v1/auth/**", "/login/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                    .anyRequest().authenticated());
+  
         return http.build();
     }
 
-    // BCrypt Password Encoder for Local User Auth
-   
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000",
+                "http://localhost:5500",
+                "http://127.0.0.1:3000",
+                "http://localhost:4200"));
+        corsConfiguration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource
+                = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return urlBasedCorsConfigurationSource;
     }
 }
